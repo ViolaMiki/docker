@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+
+    ### PHP-FPM Container
+    php-fpm:
+        image: php:7.1-fpm ### 官方镜像
+        volumes:
+            - ~/workspace:/var/www/html ### 主机文件与容器文件映射共享，PHP代码存这里
+        expose:
+            - "9000" ### 容器对外暴露的端口
+        depends_on:
+            - mysql ### 依赖并链接Mysql容器，这样在PHP容器就可以通过mysql作为主机名来访问Mysql容器了
+
+    ### Nginx Server Container
+    nginx:
+        image: nginx  ### 自定义Nginx镜像的配置目录
+        volumes:
+            - ~/workspace:/var/www/html ### 主机文件与容器文件映射共享，PHP代码存这里
+            - ~/workspace/nginx/conf.d:/etc/nginx/conf.d
+            - logs:/var/log/nginx
+        ports:
+            - "80:80" ### 端口映射，如果你主机80端口被占用，可以用8000:80
+        depends_on:
+            - php-fpm ### 依赖并连接PHP容器，这样在Nginx容器就可以通过php-fpm作为主机名来访问PHP容器了
+
+    ### MySQL Container
+    mysql:
+        image: mysql:5.7 ### 官方镜像 版本号5.7
+        volumes:
+            - mysql-data:/var/lib/mysql
+        ports:
+            - "3306:3306" ### 端口映射，主机端口:容器对外端口
+        environment:
+            MYSQL_ROOT_PASSWORD: 123456 ### 设置环境变量，这个变量名是官方镜像定义的。
+
+volumes:
+    mysql-data:
+    logs:
+
