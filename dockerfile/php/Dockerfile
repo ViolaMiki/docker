@@ -1,5 +1,14 @@
 FROM php:7.1-fpm
 
-### 设置代理
-# ENV http_proxy http://docker.for.mac.localhost:1080
-# ENV https_proxy http://docker.for.mac.localhost:1080
+RUN apt-get update && apt-get install -y \
+    libfreetype6-dev \
+    libjpeg62-turbo-dev \
+    libmcrypt-dev \
+    libsqlite3-dev \
+    libssl-dev \
+    libcurl3-dev \
+    libxml2-dev \
+    libzzip-dev \
+&& docker-php-ext-install iconv json mcrypt mbstring mysqli pdo_mysql pdo_sqlite phar curl ftp hash session simplexml tokenizer xml xmlrpc zip \
+&& docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+&& docker-php-ext-install gd

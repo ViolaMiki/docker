@@ -5,10 +5,9 @@ services:
     ### PHP-FPM Container
     php-fpm:
         build:
-           context: ../../dockerfile/php 
+            context: ./ 
         volumes:
             - ~/workspace:/var/www/html ### 主机文件与容器文件映射共享，PHP代码存这里
-            - ../../dockerfile/php/php.ini:/etc/php.ini
         expose:
             - "9000" ### 容器对外暴露的端口
 

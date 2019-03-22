@@ -1,0 +1,11 @@
+web:
+  build: ../../dockerfile/python/3
+  ports:
+    - "5000:5000"
+  volumes:
+    - ~/workspace/python/redis:/code
+  command:
+    - python
+    - /code/app.py
+  environment:
+    - PYTHONUNBUFFERED=0
